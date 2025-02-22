@@ -1,7 +1,15 @@
 import streamlit as st
 import pdfplumber
 from transformers import pipeline, CamembertTokenizer, CamembertForQuestionAnswering
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
+# tokenizer_gpt = GPT2Tokenizer.from_pretrained("antoiloui/belgpt2")
+# model_gpt = GPT2LMHeadModel.from_pretrained("antoiloui/belgpt2")
+
+# def generate_response(prompt):
+#     inputs = tokenizer_gpt(prompt, return_tensors="pt")
+#     outputs = model_gpt.generate(**inputs, max_length=50)
+#     return tokenizer_gpt.decode(outputs[0], skip_special_tokens=True)
 
 tokenizer = CamembertTokenizer.from_pretrained("cmarkea/distilcamembert-base-qa")
 model = CamembertForQuestionAnswering.from_pretrained("cmarkea/distilcamembert-base-qa")
@@ -22,35 +30,55 @@ if "chat_history" not in st.session_state:
 # Interface Streamlit
 st.title("Chatbot avec intégration de PDF")
 
-# Zone de chat
-st.write("### Conversation")
-for message in st.session_state.chat_history:
-    st.write(f"**{message['role']}**: {message['content']}")
+# Insertion d'une zone de chat avec historique, et petit bouton pour uploader un PDF
+with st.chat_message("user"):
+    st.write("Yo bro, ca dit quoi aujourdhui? 👋")
 
-# Upload de PDF
-uploaded_file = st.file_uploader("Uploader un fichier PDF", type="pdf")
-if uploaded_file is not None:
-    st.session_state.pdf_text = extract_text_from_pdf(uploaded_file)
-    st.session_state.chat_history.append({"role": "Système", "content": "PDF uploadé et prêt à être analysé."})
-
-# Champ de texte pour poser une question
-user_input = st.text_input("Posez votre question ou discutez avec le chatbot :")
-
-if user_input:
-    # Ajouter la question de l'utilisateur à l'historique
+    # petit bouton pour uploader un PDF
+    uploaded_file = st.file_uploader("PDF")
+    # confirmation ou non de l'upload
+    if uploaded_file is not None:
+        st.write("PDF uploadé avec succès !")
+        st.session_state.pdf_text = extract_text_from_pdf(uploaded_file)
+    
+    # saisie de l'utilisateur et ajout à l'historique
+    user_input = st.chat_input("Tu veux savoir quoi?", key="user_input")
     st.session_state.chat_history.append({"role": "Utilisateur", "content": user_input})
-
-    # Répondre à la question
+    
+    # réponse du chatbot
+    # si un PDF est uploadé, répondre en fonction de son contenu
     if "pdf_text" in st.session_state:
-        # Si un PDF est uploadé, répondre en fonction de son contenu
         result = pipe(question=user_input, context=st.session_state.pdf_text)
         response = result['answer']
+    # sinon, répondre par défaut
     else:
-        # Sinon, répondre à des questions générales (exemple simple)
-        response = "Je suis un chatbot. Pour des réponses plus précises, veuillez uploader un PDF."
-
-    # Ajouter la réponse du chatbot à l'historique
+        response = "Je suis un chatbot, pose-moi une question !"
     st.session_state.chat_history.append({"role": "Chatbot", "content": response})
 
-    # Rafraîchir l'affichage du chat
-    st.experimental_user()
+    # Affichage d'une siderbar montrant l'ensemble des chats
+    # avec des boutons pour passer d'un chat à l'autre
+    # On résume la conversation en cours pour avoir un nom de chat
+    # et on ajoute un bouton pour passer à un nouveau chat
+    # à chaque fois qu'un chat est commencé le nom et le bouton du chat apparait
+    # dans la sidebar, et on peut cliquer dessus pour y revenir
+st.sidebar.title("Historique des chats")
+if len(st.session_state.chat_history) > 0:
+    chat_summary = f"{st.session_state.chat_history[-2]['content']} -> {st.session_state.chat_history[-1]['content']}"
+    st.sidebar.button(chat_summary, key=len(st.session_state.chat_history))
+if st.sidebar.button("Nouveau chat"):
+    st.session_state.chat_history = []
+
+
+
+
+
+  
+    
+    
+
+
+
+
+
+
+
