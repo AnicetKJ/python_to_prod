@@ -75,21 +75,21 @@ def iso_pays(iso: str) -> str:
     return "Pays non trouvé, vérifiez le code ISO"
 
 # testons les fonctions
-# date = "2000-08-26"
-# année = 2025
-# ind1 = 237
-# ind2 = 33
-# pays1 = "Cameroon"
-# pays2 = "France"
-# iso1 = "CM"
-# iso2 = "FR"
-# print(f"jour de {date} =",jour_semaine(date))
-# print(f"{année} bissextile?",bissextile(année))
-# print(f'+{ind1} pour ',indicatif_pays(ind1))
-# print(f"{pays1} = ",pays_indicatif(pays1))
-# print(f"{pays1} abrégé = ",pays_iso(pays1))
-# print(f"{iso1} est l'iso de ",iso_pays(iso1))
-# print(f'+{ind2} pour ',indicatif_pays(ind2))
-# print(f"{pays2} = ",pays_indicatif(pays2))
-# print(f"{pays2} abrégé = ",pays_iso(pays2))
-# print(f"{iso2} est l'iso de ",iso_pays(iso2))
+date = "2000-08-26"
+année = 2025
+ind1 = 237
+ind2 = 33
+pays1 = "Cameroon"
+pays2 = "France"
+iso1 = "CM"
+iso2 = "FR"
+print(f"jour de {date} =",jour_semaine(date))
+print(f"{année} bissextile?",bissextile(année))
+print(f'+{ind1} pour ',indicatif_pays(ind1))
+print(f"{pays1} = ",pays_indicatif(pays1))
+print(f"{pays1} abrégé = ",pays_iso(pays1))
+print(f"{iso1} est l'iso de ",iso_pays(iso1))
+print(f'+{ind2} pour ',indicatif_pays(ind2))
+print(f"{pays2} = ",pays_indicatif(pays2))
+print(f"{pays2} abrégé = ",pays_iso(pays2))
+print(f"{iso2} est l'iso de ",iso_pays(iso2))
