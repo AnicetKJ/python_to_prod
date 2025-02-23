@@ -3,13 +3,13 @@ import pdfplumber
 from transformers import pipeline, CamembertTokenizer, CamembertForQuestionAnswering
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-# tokenizer_gpt = GPT2Tokenizer.from_pretrained("antoiloui/belgpt2")
-# model_gpt = GPT2LMHeadModel.from_pretrained("antoiloui/belgpt2")
+tokenizer_gpt = GPT2Tokenizer.from_pretrained("antoiloui/belgpt2")
+model_gpt = GPT2LMHeadModel.from_pretrained("antoiloui/belgpt2")
 
-# def generate_response(prompt):
-#     inputs = tokenizer_gpt(prompt, return_tensors="pt")
-#     outputs = model_gpt.generate(**inputs, max_length=50)
-#     return tokenizer_gpt.decode(outputs[0], skip_special_tokens=True)
+def generate_response(prompt):
+    inputs = tokenizer_gpt(prompt, return_tensors="pt")
+    outputs = model_gpt.generate(**inputs, max_length=50)
+    return tokenizer_gpt.decode(outputs[0], skip_special_tokens=True)
 
 tokenizer = CamembertTokenizer.from_pretrained("cmarkea/distilcamembert-base-qa")
 model = CamembertForQuestionAnswering.from_pretrained("cmarkea/distilcamembert-base-qa")
@@ -55,7 +55,7 @@ if user_input:
         response = result['answer']
     # sinon, répondre par défaut
     else:
-        response = "Je suis un chatbot, pose-moi une question !"
+        response = generate_response(user_input)
     st.write(response)    
     st.session_state.chat_history.append({"role": "Chatbot", "content": response})
 

@@ -1,17 +1,4 @@
 import streamlit as st
-from transformers import pipeline
-
-messages = [
-    {"role": "user", "content": "Who are you?"},
-]
-pipe = pipeline("text-generation", model="deepseek-ai/DeepSeek-R1", trust_remote_code=True)
-pipe(messages)
-# Load model directly
-from transformers import AutoModelForCausalLM
-model = AutoModelForCausalLM.from_pretrained("deepseek-ai/DeepSeek-R1", trust_remote_code=True)
-
-
-
 
 st.title("Echo Bot")
 
